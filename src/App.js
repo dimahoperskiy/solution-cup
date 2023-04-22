@@ -1,14 +1,17 @@
 import React from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
 import { Header } from './components/Header';
 import { Content } from './components/Content';
 import { OperationModal } from './components/OperationModal';
+import { FilterModal } from './components/FilterModal';
 
 function App() {
   const [isBlackTheme, setIsBlackTheme] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [filterOpen, setFilterOpen] = React.useState(false);
+  const [filteredOperations, setFilteredOperations] = React.useState(null);
+  const [filteredCategory, setFilteredCategory] = React.useState('');
   const [operationType, setOperationType] = React.useState('');
   const [operations, setOperations] = React.useState([]);
   const { palette } = createTheme();
@@ -65,22 +68,36 @@ function App() {
     [isBlackTheme]
   );
 
+  console.log('filteredOperations', filteredOperations);
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <Header />
         <Content
-          operations={operations}
+          operations={filteredOperations ? filteredOperations : operations}
           setModalOpen={setModalOpen}
           setOperationType={setOperationType}
+          setFilterOpen={setFilterOpen}
         />
         {modalOpen && (
           <OperationModal
             operationType={operationType}
-            operations={operations}
+            operations={filteredOperations ? filteredOperations : operations}
             setOperations={setOperations}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
+          />
+        )}
+        {filterOpen && (
+          <FilterModal
+            operations={operations}
+            filterOpen={filterOpen}
+            setFilterOpen={setFilterOpen}
+            filteredOperations={filteredOperations}
+            setFilteredOperations={setFilteredOperations}
+            filteredCategory={filteredCategory}
+            setFilteredCategory={setFilteredCategory}
           />
         )}
       </div>

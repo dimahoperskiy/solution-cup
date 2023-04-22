@@ -28,7 +28,6 @@ import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 
 const ButtonStyled = styled(IconButton)(({ theme }) => ({
-  // backgroundColor: theme.palette.headerColor.main,
   backgroundColor: theme.palette.background.default,
   borderRadius: '8px',
   '&:hover': {
@@ -62,7 +61,6 @@ const NumericFormatCustom = React.forwardRef(function NumericFormatCustom(
       }}
       thousandSeparator
       valueIsNumericString
-      // prefix="₽"
     />
   );
 });
@@ -79,6 +77,9 @@ const OperationModal = ({
   const [dateValue, setDateValue] = React.useState(new Date());
   const [commentValue, setCommentValue] = React.useState('');
   const [categoryName, setCategoryName] = React.useState('');
+  const [amountError, setAmountError] = React.useState(false);
+  const [dateError, setDateError] = React.useState(false);
+  const [categoryError, setCategoryError] = React.useState(false);
 
   const CategoryButton = ({ label, children }) => (
     <ButtonWrapper
@@ -92,7 +93,10 @@ const OperationModal = ({
           backgroundColor:
             categoryName === label ? theme.palette.headerColor.main : '#fff',
         }}
-        onClick={() => setCategoryName(label)}
+        onClick={() => {
+          setCategoryError(false);
+          setCategoryName(label);
+        }}
       >
         {children}
       </ButtonStyled>
@@ -101,9 +105,21 @@ const OperationModal = ({
   );
 
   const handleAmountChange = (e) => {
+    if (!e.target.value) {
+      setAmountError(true);
+    } else if (Number(e.target.value) <= 0) {
+      setAmountError(true);
+    } else {
+      setAmountError(false);
+    }
     setAmountValue(e.target.value);
   };
   const handleDateChange = (newValue) => {
+    if (!newValue) {
+      setDateError(true);
+    } else {
+      setDateError(false);
+    }
     setDateValue(newValue);
   };
   const handleCommentChange = (e) => {
@@ -114,6 +130,14 @@ const OperationModal = ({
   };
 
   const handleSave = () => {
+    if (!amountValue) {
+      setAmountError(true);
+      return;
+    }
+    if (!categoryName && operationType === 'expense') {
+      setCategoryError(true);
+      return;
+    }
     const newOperation = {
       type: operationType,
       amount: amountValue,
@@ -121,7 +145,11 @@ const OperationModal = ({
       comment: commentValue,
       category: categoryName,
     };
-    setOperations([...operations, newOperation]);
+    setOperations(
+      [...operations, newOperation].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      })
+    );
     setModalOpen(false);
   };
 
@@ -177,6 +205,7 @@ const OperationModal = ({
           >
             <InputLabel htmlFor="standard-adornment-amount">Сумма</InputLabel>
             <Input
+              error={amountError}
               color="primary"
               id="standard-adornment-amount"
               value={amountValue}
@@ -199,6 +228,7 @@ const OperationModal = ({
                 renderInput={(params) => (
                   <TextField
                     {...params}
+                    error={dateError}
                     disabled
                     onKeyDown={(e) => {
                       e.preventDefault();
@@ -219,7 +249,13 @@ const OperationModal = ({
           </FormControl>
           {operationType === 'expense' && (
             <div>
-              <Typography sx={{ mt: '20px', fontSize: '16px' }}>
+              <Typography
+                sx={{
+                  mt: '20px',
+                  fontSize: '16px',
+                  color: categoryError && 'red',
+                }}
+              >
                 Категория:
               </Typography>
               <div
@@ -253,7 +289,13 @@ const OperationModal = ({
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSave} color="success">
+          <Button
+            onClick={handleSave}
+            color="success"
+            disabled={
+              amountError || (operationType === 'expense' && categoryError)
+            }
+          >
             Сохранить
           </Button>
           <Button onClick={handleClose}>Закрыть</Button>

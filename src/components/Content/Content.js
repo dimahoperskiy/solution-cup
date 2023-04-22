@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Paper from '@mui/material/Paper';
-import { styled, Typography } from '@mui/material';
+import { styled, Typography, useTheme } from '@mui/material';
 import formatNumber from '../../utils/formatNumber';
 import { IconButton } from '@mui/material';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -14,6 +14,10 @@ import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import AddCardOutlinedIcon from '@mui/icons-material/AddCardOutlined';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
 const AvailablePaper = styled(Paper)({
   padding: '60px 35px',
@@ -103,27 +107,50 @@ const OperationCard = ({ operation }) => {
           {operation.category ? operation.category : 'Доход'}
         </Typography>
       </div>
-      <div>
-        {operation.comment && (
-          <Typography sx={{ textAlign: 'end' }}>{operation.comment}</Typography>
-        )}
-        {operation.type === 'income' && (
-          <Typography
-            sx={{ color: '#10ff00', textAlign: 'end' }}
-          >{`+ ${formatNumber(operation.amount)}₽`}</Typography>
-        )}
-        {operation.type === 'expense' && (
-          <Typography
-            sx={{ color: '#ff1313', textAlign: 'end' }}
-          >{`- ${formatNumber(operation.amount)}₽`}</Typography>
-        )}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '25%',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Typography>{new Date(operation.date).toLocaleDateString()}</Typography>
+        <div>
+          {operation.comment && (
+            <Typography sx={{ textAlign: 'end' }}>
+              {operation.comment}
+            </Typography>
+          )}
+          {operation.type === 'income' && (
+            <Typography
+              sx={{ color: '#10ff00', textAlign: 'end' }}
+            >{`+ ${formatNumber(operation.amount)}₽`}</Typography>
+          )}
+          {operation.type === 'expense' && (
+            <Typography
+              sx={{ color: '#ff1313', textAlign: 'end' }}
+            >{`- ${formatNumber(operation.amount)}₽`}</Typography>
+          )}
+        </div>
       </div>
     </OperationContainer>
   );
 };
 
-const Content = ({ operations, setModalOpen, setOperationType }) => {
+const Content = ({
+  operations,
+  setModalOpen,
+  setOperationType,
+  setFilterOpen,
+}) => {
   const [availableMoney, setAvailableMoney] = React.useState(0);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const theme = useTheme();
 
   const handleIncomeClick = () => {
     setOperationType('income');
@@ -149,6 +176,14 @@ const Content = ({ operations, setModalOpen, setOperationType }) => {
   const operationsMapped = operations.map((el) => (
     <OperationCard operation={el} />
   ));
+
+  const incomeMapped = operations
+    .filter((el) => el.type === 'income')
+    .map((oper) => <OperationCard operation={oper} />);
+
+  const expenseMapped = operations
+    .filter((el) => el.type === 'expense')
+    .map((oper) => <OperationCard operation={oper} />);
 
   return (
     <Card sx={{ boxShadow: 'none' }}>
@@ -182,18 +217,47 @@ const Content = ({ operations, setModalOpen, setOperationType }) => {
             <Typography sx={{ mt: '5px', fontSize: '14px' }}>Расход</Typography>
           </ButtonWrapper>
         </ButtonsRow>
-        <Typography variant="h3" sx={{ mt: '25px' }}>
-          История операций
-        </Typography>
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            marginTop: '20px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: '30px',
           }}
         >
-          {operationsMapped}
+          <Typography variant="h3">История операций</Typography>
+          <IconButton
+            sx={{ backgroundColor: theme.palette.headerColor.main, mr: '25px' }}
+            onClick={() => setFilterOpen(true)}
+          >
+            <FilterAltOutlinedIcon />
+          </IconButton>
         </div>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs
+              centered
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Все" />
+              <Tab label="Доходы" />
+              <Tab label="Расходы" />
+            </Tabs>
+          </Box>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: '20px',
+            }}
+          >
+            {value === 0 && operationsMapped}
+            {value === 1 && incomeMapped}
+            {value === 2 && expenseMapped}
+          </div>
+        </Box>
       </CardContent>
     </Card>
   );
