@@ -91,7 +91,9 @@ const OperationModal = ({
       <ButtonStyled
         sx={{
           backgroundColor:
-            categoryName === label ? theme.palette.headerColor.main : '#fff',
+            categoryName === label
+              ? theme.palette.headerColor.main
+              : theme.palette.text.secondary,
         }}
         onClick={() => {
           setCategoryError(false);
@@ -177,7 +179,7 @@ const OperationModal = ({
           height: '65%',
           maxWidth: '400px',
           padding: '0',
-          backgroundColor: '#fff',
+          backgroundColor: theme.palette.background.default,
         },
       }}
       maxWidth="xs"

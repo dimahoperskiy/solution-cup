@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { Content } from './components/Content';
 import { OperationModal } from './components/OperationModal';
 import { FilterModal } from './components/FilterModal';
+import { ThemeSwitch } from './components/ThemeSwitch';
 
 function App() {
   const [isBlackTheme, setIsBlackTheme] = React.useState(false);
@@ -68,12 +69,19 @@ function App() {
     [isBlackTheme]
   );
 
-  console.log('filteredOperations', filteredOperations);
-
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <Header />
+        <ThemeSwitch
+          onClick={() => setIsBlackTheme(!isBlackTheme)}
+          sx={{
+            position: 'absolute',
+            zIndex: 1,
+            right: 5,
+            top: '20px',
+          }}
+        />
         <Content
           operations={filteredOperations ? filteredOperations : operations}
           setModalOpen={setModalOpen}

@@ -186,7 +186,7 @@ const Content = ({
     .map((oper) => <OperationCard operation={oper} />);
 
   return (
-    <Card sx={{ boxShadow: 'none' }}>
+    <Card sx={{ boxShadow: 'none', height: '100vh' }}>
       <CardContent
         sx={{
           display: 'flex',
@@ -195,7 +195,10 @@ const Content = ({
           pb: '50px',
         }}
       >
-        <AvailablePaper eleveation={3}>
+        <AvailablePaper
+          sx={{ border: '1px solid ' + theme.palette.headerColor.main }}
+          eleveation={3}
+        >
           <Typography variant="h3" sx={{ margin: '0px 0' }}>
             Доступно:
           </Typography>
@@ -241,9 +244,9 @@ const Content = ({
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Все" />
-              <Tab label="Доходы" />
-              <Tab label="Расходы" />
+              <Tab sx={{ color: theme.palette.text.primary }} label="Все" />
+              <Tab sx={{ color: theme.palette.text.primary }} label="Доходы" />
+              <Tab sx={{ color: theme.palette.text.primary }} label="Расходы" />
             </Tabs>
           </Box>
           <div

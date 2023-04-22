@@ -68,7 +68,7 @@ const FilterModal = ({
           height: '65%',
           maxWidth: '400px',
           padding: '0',
-          backgroundColor: '#fff',
+          backgroundColor: theme.palette.background.paper,
         },
       }}
       maxWidth="xs"
