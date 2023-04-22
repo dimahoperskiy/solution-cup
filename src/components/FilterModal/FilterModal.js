@@ -81,7 +81,6 @@ const FilterModal = ({
         <DialogContent>
           <Autocomplete
             value={filteredCategory}
-            // defaultValue={filteredCategory}
             onChange={(event, newValue) => {
               setValue(newValue);
             }}

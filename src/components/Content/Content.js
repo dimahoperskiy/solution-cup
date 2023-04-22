@@ -56,13 +56,6 @@ const OperationContainer = styled('div')(({ theme }) => ({
   paddingBottom: '20px',
 }));
 
-// const ButtonStyled = styled(IconButton)(({ theme }) => ({
-//   backgroundColor: theme.palette.headerColor.main,
-//   // borderRadius: '8px',
-//   '&:hover': {
-//     backgroundColor: '#fffa00 !important',
-//   },
-// }));
 const getOperationIcon = (operation) => {
   let icon;
   switch (operation) {

@@ -196,7 +196,6 @@ const OperationModal = ({
           <FormControl
             fullWidth
             sx={{
-              // borderBottom: '1px solid' + theme.palette.hoverColor.main,
               mt: '15px',
               pb: '20px',
             }}
