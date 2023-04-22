@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   DialogTitle,
@@ -31,18 +31,13 @@ const FilterModal = ({
   const [value, setValue] = React.useState('');
   const [inputValue, setInputValue] = React.useState('');
 
-  console.log('filteredCategory', filteredCategory);
-
   const handleSave = () => {
     if (filteredCategory) {
-      console.log('here');
       const newFiltered = operations.filter(
         (el) => el.category === filteredCategory
       );
-      console.log('newFiltered', newFiltered);
       setFilteredOperations(newFiltered);
     } else {
-      console.log('here2');
       setFilteredOperations(null);
     }
     setFilteredCategory(value);
@@ -52,8 +47,6 @@ const FilterModal = ({
   const handleClose = () => {
     setFilterOpen(false);
   };
-
-  useEffect(() => {}, []);
 
   return (
     <Dialog

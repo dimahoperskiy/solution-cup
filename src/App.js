@@ -66,7 +66,7 @@ function App() {
           mode: isBlackTheme ? 'dark' : 'light',
         },
       }),
-    [isBlackTheme]
+    [isBlackTheme, palette]
   );
 
   return (

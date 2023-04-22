@@ -127,9 +127,7 @@ const OperationModal = ({
   const handleCommentChange = (e) => {
     setCommentValue(e.target.value);
   };
-  const handleDateClickOpen = (val) => {
-    console.log('val', val);
-  };
+  const handleDateClickOpen = (val) => {};
 
   const handleSave = () => {
     if (!amountValue) {
@@ -154,8 +152,6 @@ const OperationModal = ({
     );
     setModalOpen(false);
   };
-
-  console.log('categoryName', categoryName);
 
   const handleClose = () => {
     setModalOpen(false);
