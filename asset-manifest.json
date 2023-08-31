@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/solution-cup/static/css/main.93a0497a.css",
+    "main.js": "/solution-cup/static/js/main.f972a41d.js",
+    "static/media/logo.png": "/solution-cup/static/media/logo.6f6975f93cfaf341009d.png",
+    "index.html": "/solution-cup/index.html",
+    "main.93a0497a.css.map": "/solution-cup/static/css/main.93a0497a.css.map",
+    "main.f972a41d.js.map": "/solution-cup/static/js/main.f972a41d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.93a0497a.css",
+    "static/js/main.f972a41d.js"
+  ]
+}
